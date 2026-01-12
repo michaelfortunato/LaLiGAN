@@ -1,6 +1,7 @@
-import torch
 import numpy as np
-from dataset import *
+import torch
+
+from laliegan.dataset import *
 
 cos_corr = lambda x, y: torch.trace(x.T @ y) / torch.norm(x) / torch.norm(y)
 
@@ -16,7 +17,7 @@ def affine_coord(tensor, dummy_pos=None):
 
 # so(n) Lie algebra
 def so(n):
-    L = np.zeros((n*(n-1)//2, n, n))
+    L = np.zeros((n * (n - 1) // 2, n, n))
     k = 0
     for i in range(n):
         for j in range(i):
@@ -37,16 +38,28 @@ def get_dataset(args):
         val_dataset = MultiTimestepReactionDiffusionDataset(mode='val')
         args['input_dim'] = train_dataset[0][0].shape[1]
     elif args['task'] == 'mt_rd_ds':
-        train_dataset = MultiTimestepReactionDiffusionDataset(mode='train', downsample=True)
-        val_dataset = MultiTimestepReactionDiffusionDataset(mode='val', downsample=True)
+        train_dataset = MultiTimestepReactionDiffusionDataset(
+            mode='train', downsample=True
+        )
+        val_dataset = MultiTimestepReactionDiffusionDataset(
+            mode='val', downsample=True
+        )
         args['input_dim'] = train_dataset[0][0].shape[1]
     elif args['task'] == 'ld_pendulum':
-        train_dataset = LowDimPendulumDataset(mode='train', n_timesteps=args['n_comps'])
-        val_dataset = LowDimPendulumDataset(mode='val', n_timesteps=args['n_comps'])
+        train_dataset = LowDimPendulumDataset(
+            mode='train', n_timesteps=args['n_comps']
+        )
+        val_dataset = LowDimPendulumDataset(
+            mode='val', n_timesteps=args['n_comps']
+        )
         args['input_dim'] = train_dataset[0][0].shape[1]
     elif args['task'] == 'lv':
-        train_dataset = LotkaVolterraDataset(mode='train', n_timesteps=args['n_comps'])
-        val_dataset = LotkaVolterraDataset(mode='val', n_timesteps=args['n_comps'])
+        train_dataset = LotkaVolterraDataset(
+            mode='train', n_timesteps=args['n_comps']
+        )
+        val_dataset = LotkaVolterraDataset(
+            mode='val', n_timesteps=args['n_comps']
+        )
         args['input_dim'] = train_dataset[0][0].shape[-1]
     elif args['task'] == 'rot_shelf':
         train_dataset = RotatingShelfDataset(mode='train')
